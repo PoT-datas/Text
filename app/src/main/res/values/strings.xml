@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Text</string>
+
+    <string name="sample_text">
+        Here is a phone number : +237 6 53 37 93 79 and 653 379 379 and (415) 555-2671 and +14155552671 and +1 (415) 555-2671
+        \nHere is an email : priyank@gmail.com
+        \nHow about a URL : www.example.com
+        \nMentions : @goku @gohan
+        \nSome Crazy hashtags : #thug_life #chose #me \n
+    </string>
+</resources>

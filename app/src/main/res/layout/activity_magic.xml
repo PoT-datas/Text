@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main"
+    tools:context=".test.MainActivity"
+    android:orientation="vertical">
+
+    <api.pot.text.xtv.tools.MagicTextView
+        android:textSize="70dp"
+        android:textColor="#ff333333"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableLeft="@android:drawable/btn_star"
+        android:textStyle="bold"
+        android:padding="0dp"
+        android:textIsSelectable="true"
+        app:ctv_foreground="@drawable/fake_luxury_tiled"
+        app:ctv_innerShadowDy="2dp"
+        app:ctv_innerShadowColor="#FF000000"
+        app:ctv_innerShadowRadius="1dp"
+        app:ctv_outerShadowDy="3dp"
+        app:ctv_outerShadowColor="#FF0088ff"
+        app:ctv_outerShadowRadius="10dp"
+        app:ctv_strokeColor="#FFff0000"
+        app:ctv_strokeJoinStyle="miter"
+        app:ctv_strokeWidth="5dp"
+        android:text="Magic" />
+
+</LinearLayout>
