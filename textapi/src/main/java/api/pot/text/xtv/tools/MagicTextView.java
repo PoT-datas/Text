@@ -13,6 +13,7 @@ import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -20,17 +21,95 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import api.pot.text.R;
 
+import static api.pot.text.tools.Global.getViewBoundFrom;
+
 @SuppressLint("AppCompatCustomView")
 public class MagicTextView extends TextView {
+	private int viewId = 0;
+	private View underView;
+	private List<Integer> autoColors = new ArrayList<>();
+
+	public void useAutoColor(View underView, Integer... colors) {
+		this.underView = underView;
+		if(colors!=null){
+			for(Integer color : colors)
+				this.autoColors.add(color);
+		}
+		setAutoColor();
+	}
+
+	private void setAutoColor() {
+		if(underView==null || underView.getWidth()==0 || underView.getHeight()==0) return;
+
+		RectF cont = getViewBoundFrom(this, underView);
+
+		Bitmap bmp = Bitmap.createBitmap(underView.getWidth(), underView.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas cvs = new Canvas(bmp);
+		cvs.clipRect(cont);
+
+		underView.layout(underView.getLeft(), underView.getTop(), underView.getRight(), underView.getBottom());
+		underView.draw(cvs);
+
+		int colorBg = getDominantColor(bmp);
+
+		int colorText = getFurthestColor(colorBg, autoColors);
+
+		if(colorText!=getCurrentTextColor()) setTextColor(colorText);
+	}
+
+	private int getFurthestColor(int color, List<Integer> colors) {
+		if(colors==null || colors.size()==0)
+			return Color.rgb(
+					255-Color.red(color),
+					255-Color.red(color),
+					255-Color.red(color)
+			);
+		else {
+			int lenMax = 0;
+			int len = 0;
+			int iMax = 0;
+			int i = 0;
+			for(Integer c : colors){
+				len = getLength(color, c);
+				if(len>lenMax){
+					lenMax = len;
+					iMax = i;
+				}
+				i++;
+			}
+			return colors.get(iMax);
+		}
+	}
+
+	private int getLength(int c1, int c2) {
+		return (int) Math.sqrt(Math.pow(Color.red(c1)-Color.red(c2), 2)+
+				Math.pow(Color.green(c1)-Color.green(c2), 2)+
+				Math.pow(Color.blue(c1)-Color.blue(c2), 2));
+	}
+
+	private int getFurthestColor(int color) {
+		return getFurthestColor(color, null);
+	}
+
+	public static int getDominantColor(Bitmap bitmap) {
+		Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
+		final int color = newBitmap.getPixel(0, 0);
+		newBitmap.recycle();
+		return color;
+	}
+
 	protected int fromIndex=0, toIndex=0;
 
 	private ArrayList<Shadow> outerShadows;
@@ -171,10 +250,16 @@ public class MagicTextView extends TextView {
 		return this.foregroundDrawable == null ? this.foregroundDrawable : new ColorDrawable(this.getCurrentTextColor());
 	}
 
-	
+	@Override
+	public boolean onPreDraw() {
+		return super.onPreDraw();
+	}
+
 	@Override
 	public void onDraw(Canvas canvas){
 		super.onDraw(canvas);
+
+		setAutoColor();
 		
 		freeze();
 		Drawable restoreBackground = this.getBackground();

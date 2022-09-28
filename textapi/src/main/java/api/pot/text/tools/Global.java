@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -90,6 +91,45 @@ public class Global {
         ges_design_type_face =  Typeface.create(
                 Typeface.createFromAsset(context.getAssets(), "fonts/Amadeus.ttf"),
                 Typeface.BOLD);
+    }
+
+    public static RectF getViewBoundFrom(View view) {
+        return getViewBoundFrom(view, null);
+    }
+
+    public static RectF getViewBoundFrom(View view, View from) {
+        int[] location = new int[2];
+
+        /*view.getLocationOnScreen(location);
+        view.getLocationInWindow(location);
+        RectF viewBound = new RectF();
+        //
+        viewBound = new RectF(location[0], location[1],
+                location[0]+view.getWidth(), location[1]+view.getHeight());
+        return viewBound;*/
+
+
+
+
+        Rect bound = new Rect();
+
+        //For coordinates location relative to the parent
+        view.getLocalVisibleRect(bound);
+
+
+        if(from!=null){
+            bound = new Rect();
+
+            //For coordinates location relative to the screen/display
+            view.getGlobalVisibleRect(bound);
+
+            Rect boundF = new Rect();
+            from.getGlobalVisibleRect(boundF);
+            return new RectF(bound.left-boundF.left, bound.top-boundF.top, bound.right-boundF.left, bound.bottom-boundF.top);
+        }
+
+
+        return new RectF(bound.left, bound.top, bound.right, bound.bottom);
     }
 
     public static String getCacheDirForBackupCV(Context context){//CV=Custom View

@@ -43,19 +43,19 @@ public class XEditText extends EditText {
     private void init() {
     }
 
-    @Override
+    /*@Override
     protected void onDraw(Canvas canvas) {
 
-        /*int save = canvas.save();
+        ///int save = canvas.save();
 
-        canvas.drawColor(Color.argb(20, 0,0,0));
+        ///canvas.drawColor(Color.argb(20, 0,0,0));
 
-        TextPainter.drawTextCentered("Description", null, canvas,
-                new RectF(0,0,getWidth(),getHeight()), true);
+        ///TextPainter.drawTextCentered("Description", null, canvas,
+           ///     new RectF(0,0,getWidth(),getHeight()), true);
 
-        super.onDraw(canvas);
+        ///super.onDraw(canvas);
 
-        canvas.restoreToCount(save);*/
+        ///canvas.restoreToCount(save);
 
         Rect clipRect = new Rect();
         RectF clipRectF = new RectF();
@@ -90,5 +90,5 @@ public class XEditText extends EditText {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-    }
+    }*/
 }

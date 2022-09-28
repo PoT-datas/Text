@@ -2,15 +2,19 @@ package api.pot.text.xtv.tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
+import android.widget.Toast;
 
 @SuppressLint("AppCompatCustomView")
 public class ScrollTextView extends MagicTextView {
-
+    private boolean scroolOnLongSingle = true;
 
     // scrolling feature
     private Scroller mSlr;
@@ -112,6 +116,22 @@ public class ScrollTextView extends MagicTextView {
         mPaused = false;
     }
 
+    private boolean scroolChecked = false;
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if(scroolOnLongSingle){
+            if(calculateTextLen()>getWidth())
+                if(!scroolChecked) {
+                    startScroll();
+                    scroolChecked = true;
+                }
+            else
+                if(!isPaused()) pauseScroll();
+        }
+        Toast.makeText(getContext(), calculateTextLen()+"/"+getWidth(), Toast.LENGTH_LONG).show();
+    }
+
     /**
      * calculate the scrolling length of the text in pixel
      *
@@ -125,6 +145,16 @@ public class ScrollTextView extends MagicTextView {
         int scrollingLen = rect.width() + getWidth();
         rect = null;
         return scrollingLen;
+    }
+
+    private int calculateTextLen() {
+        TextPaint tp = getPaint();
+        Rect rect = new Rect();
+        String strTxt = getText().toString();
+        tp.getTextBounds(strTxt, 0, strTxt.length(), rect);
+        int textLen = rect.width();
+        rect = null;
+        return textLen;
     }
 
     /**
@@ -163,7 +193,14 @@ public class ScrollTextView extends MagicTextView {
             return;
 
         if (mSlr.isFinished() && (!mPaused)) {
+            setAlpha(0);
             this.startScroll();
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setAlpha(1);
+                }
+            }, 500);
         }
     }
 
