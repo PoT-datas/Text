@@ -21,7 +21,6 @@ public class ScrollActivity extends AppCompatActivity {
     RelativeLayout bg;
 
     List<Integer> res = new ArrayList<>();
-    int i=0;
 
     Random rnd;
 
@@ -42,22 +41,24 @@ public class ScrollActivity extends AppCompatActivity {
         scrolltext = (ScrollTextView) findViewById(R.id.scrolltext);
         bg = (RelativeLayout) findViewById(R.id.bg);
 
-        scrolltext.setOnClickListener(new View.OnClickListener() {
+        bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bg.setBackgroundColor(Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
                 scrolltext.invalidate();
-                i++;
             }
         });
-        scrolltext.setSingleLine(true);
+        scrolltext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scrolltext.tongleCutOnLongSingle();
+            }
+        });
         findViewById(R.id.tong).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 scrolltext.setText(shortT?"je suis jesus. L'unique fils de Dieu.":"je suis jesus.");
                 shortT = !shortT;
-                /*scrolltext.tongle();
-                if(scrolltext.isPaused()) scrolltext.setSingleLine(false);*/
             }
         });
 

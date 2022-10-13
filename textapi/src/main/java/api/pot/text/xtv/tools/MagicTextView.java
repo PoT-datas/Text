@@ -19,6 +19,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -37,6 +38,22 @@ import static api.pot.text.tools.Global.getViewBoundFrom;
 
 @SuppressLint("AppCompatCustomView")
 public class MagicTextView extends TextView {
+	protected boolean cutOnLongSingle = true;
+	private String mainText;
+
+	public void tongleCutOnLongSingle() {
+		setCutOnLongSingle(!isCutOnLongSingle());
+	}
+
+	public void setCutOnLongSingle(boolean cutOnLongSingle) {
+		this.cutOnLongSingle = cutOnLongSingle;
+		invalidate();
+	}
+
+	public boolean isCutOnLongSingle() {
+		return cutOnLongSingle;
+	}
+
 	private int viewId = 0;
 	private View underView;
 	private List<Integer> autoColors = new ArrayList<>();
@@ -152,51 +169,55 @@ public class MagicTextView extends TextView {
 	
 		if(attrs != null){
 			TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MagicTextView);
-			
-            String typefaceName = a.getString( R.styleable.MagicTextView_ctv_typeface);
+
+			cutOnLongSingle = a.getBoolean( R.styleable.MagicTextView_xtv_cut_on_long_single, true);
+			if(a.getBoolean( R.styleable.MagicTextView_xtv_single_line, false))
+				setSingleLine();
+
+            String typefaceName = a.getString( R.styleable.MagicTextView_xtv_typeface);
             if(typefaceName != null) {
                 Typeface tf = Typeface.createFromAsset(getContext().getAssets(), String.format("fonts/%s", typefaceName));
                 setTypeface(tf);
             }
             
-			if(a.hasValue(R.styleable.MagicTextView_ctv_foreground)){
-				Drawable foreground = a.getDrawable(R.styleable.MagicTextView_ctv_foreground);
+			if(a.hasValue(R.styleable.MagicTextView_xtv_foreground)){
+				Drawable foreground = a.getDrawable(R.styleable.MagicTextView_xtv_foreground);
 				if(foreground != null){
 					this.setForegroundDrawable(foreground);
 				}else{
-					this.setTextColor(a.getColor(R.styleable.MagicTextView_ctv_foreground, 0xff000000));
+					this.setTextColor(a.getColor(R.styleable.MagicTextView_xtv_foreground, 0xff000000));
 				}
 			}
 		
-			if(a.hasValue(R.styleable.MagicTextView_ctv_background)){
-				Drawable background = a.getDrawable(R.styleable.MagicTextView_ctv_background);
+			if(a.hasValue(R.styleable.MagicTextView_xtv_background)){
+				Drawable background = a.getDrawable(R.styleable.MagicTextView_xtv_background);
 				if(background != null){
 					this.setBackgroundDrawable(background);
 				}else{
-					this.setBackgroundColor(a.getColor(R.styleable.MagicTextView_ctv_background, 0xff000000));
+					this.setBackgroundColor(a.getColor(R.styleable.MagicTextView_xtv_background, 0xff000000));
 				}
 			}
 			
-			if(a.hasValue(R.styleable.MagicTextView_ctv_innerShadowColor)){
-				this.addInnerShadow(a.getDimensionPixelSize(R.styleable.MagicTextView_ctv_innerShadowRadius, 0),
-									a.getDimensionPixelOffset(R.styleable.MagicTextView_ctv_innerShadowDx, 0),
-									a.getDimensionPixelOffset(R.styleable.MagicTextView_ctv_innerShadowDy, 0),
-									a.getColor(R.styleable.MagicTextView_ctv_innerShadowColor, 0xff000000));
+			if(a.hasValue(R.styleable.MagicTextView_xtv_innerShadowColor)){
+				this.addInnerShadow(a.getDimensionPixelSize(R.styleable.MagicTextView_xtv_innerShadowRadius, 0),
+									a.getDimensionPixelOffset(R.styleable.MagicTextView_xtv_innerShadowDx, 0),
+									a.getDimensionPixelOffset(R.styleable.MagicTextView_xtv_innerShadowDy, 0),
+									a.getColor(R.styleable.MagicTextView_xtv_innerShadowColor, 0xff000000));
 			}
 			
-			if(a.hasValue(R.styleable.MagicTextView_ctv_outerShadowColor)){
-				this.addOuterShadow(a.getDimensionPixelSize(R.styleable.MagicTextView_ctv_outerShadowRadius, 0),
-									a.getDimensionPixelOffset(R.styleable.MagicTextView_ctv_outerShadowDx, 0),
-									a.getDimensionPixelOffset(R.styleable.MagicTextView_ctv_outerShadowDy, 0),
-									a.getColor(R.styleable.MagicTextView_ctv_outerShadowColor, 0xff000000));
+			if(a.hasValue(R.styleable.MagicTextView_xtv_outerShadowColor)){
+				this.addOuterShadow(a.getDimensionPixelSize(R.styleable.MagicTextView_xtv_outerShadowRadius, 0),
+									a.getDimensionPixelOffset(R.styleable.MagicTextView_xtv_outerShadowDx, 0),
+									a.getDimensionPixelOffset(R.styleable.MagicTextView_xtv_outerShadowDy, 0),
+									a.getColor(R.styleable.MagicTextView_xtv_outerShadowColor, 0xff000000));
 			}
 			
-			if(a.hasValue(R.styleable.MagicTextView_ctv_strokeColor)){
-				float strokeWidth = a.getDimensionPixelSize(R.styleable.MagicTextView_ctv_strokeWidth, 1);
-				int strokeColor = a.getColor(R.styleable.MagicTextView_ctv_strokeColor, 0xff000000);
-				float strokeMiter = a.getDimensionPixelSize(R.styleable.MagicTextView_ctv_strokeMiter, 10);
+			if(a.hasValue(R.styleable.MagicTextView_xtv_strokeColor)){
+				float strokeWidth = a.getDimensionPixelSize(R.styleable.MagicTextView_xtv_strokeWidth, 1);
+				int strokeColor = a.getColor(R.styleable.MagicTextView_xtv_strokeColor, 0xff000000);
+				float strokeMiter = a.getDimensionPixelSize(R.styleable.MagicTextView_xtv_strokeMiter, 10);
 				Join strokeJoin = null;
-				switch(a.getInt(R.styleable.MagicTextView_ctv_strokeJoinStyle, 0)){
+				switch(a.getInt(R.styleable.MagicTextView_xtv_strokeJoinStyle, 0)){
 				case(0): strokeJoin = Join.MITER; break;
 				case(1): strokeJoin = Join.BEVEL; break;
 				case(2): strokeJoin = Join.ROUND; break;
@@ -260,6 +281,8 @@ public class MagicTextView extends TextView {
 		super.onDraw(canvas);
 
 		setAutoColor();
+
+		controlTextLength();
 		
 		freeze();
 		Drawable restoreBackground = this.getBackground();
@@ -330,7 +353,54 @@ public class MagicTextView extends TextView {
 
 		unfreeze();
 	}
-	
+
+	private void controlTextLength() {
+		if(!isSinglLine()) return;
+		if(!cutOnLongSingle) {
+			toMain = false;
+			if(!newText && mainText!=null && mainText.length()>getText().length())
+				setText(mainText);
+			return;
+		}
+		if(calculateTextLen()>getWidth()){
+			if(getText().toString().equals(mainText)){
+				int len = mainText.length()*getWidth()/calculateTextLen();
+				toMain = false;
+				if(len>5) setText(mainText.substring(0, len-3)+"...");
+				else setText(mainText.substring(0, len));
+			}else {
+				mainText = getText().toString();
+				invalidate();
+			}
+		}
+		newText = false;
+	}
+
+	@SuppressLint("NewApi")
+	protected boolean isSinglLine() {
+		return getMaxLines()==1;
+	}
+
+	private boolean toMain = true;
+	private boolean newText = false;
+	@Override
+	public void setText(CharSequence text, BufferType type) {
+		super.setText(text, type);
+		if(toMain)mainText = text.toString();
+		else toMain = true;
+		newText = true;
+	}
+
+	protected int calculateTextLen() {
+		TextPaint tp = getPaint();
+		Rect rect = new Rect();
+		String strTxt = getText().toString();
+		tp.getTextBounds(strTxt, 0, strTxt.length(), rect);
+		int textLen = rect.width();
+		rect = null;
+		return textLen;
+	}
+
 	private void generateTempCanvas(){
 	    String key = String.format("%dx%d", getWidth(), getHeight());
 	    Pair<Canvas, Bitmap> stored = canvasStore.get(key);

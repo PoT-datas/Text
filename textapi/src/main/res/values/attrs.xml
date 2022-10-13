@@ -2,29 +2,41 @@
 <resources>
 
     <declare-styleable name="MagicTextView">
-        <attr name="ctv_innerShadowColor" format="color"/>
-        <attr name="ctv_innerShadowRadius" format="dimension"/>
-        <attr name="ctv_innerShadowDx" format="dimension"/>
-        <attr name="ctv_innerShadowDy" format="dimension"/>
+        <attr name="xtv_innerShadowColor" format="color"/>
+        <attr name="xtv_innerShadowRadius" format="dimension"/>
+        <attr name="xtv_innerShadowDx" format="dimension"/>
+        <attr name="xtv_innerShadowDy" format="dimension"/>
 
-        <attr name="ctv_outerShadowColor" format="color"/>
-        <attr name="ctv_outerShadowRadius" format="dimension"/>
-        <attr name="ctv_outerShadowDx" format="dimension"/>
-        <attr name="ctv_outerShadowDy" format="dimension"/>
+        <attr name="xtv_outerShadowColor" format="color"/>
+        <attr name="xtv_outerShadowRadius" format="dimension"/>
+        <attr name="xtv_outerShadowDx" format="dimension"/>
+        <attr name="xtv_outerShadowDy" format="dimension"/>
 
-        <attr name="ctv_typeface" format="string" />
+        <attr name="xtv_typeface" format="string" />
 
-        <attr name="ctv_foreground" format="reference|color"/>
-        <attr name="ctv_background" format="reference|color"/>
+        <attr name="xtv_foreground" format="reference|color"/>
+        <attr name="xtv_background" format="reference|color"/>
 
-        <attr name="ctv_strokeWidth" format="dimension" />
-        <attr name="ctv_strokeMiter" format="dimension" />
-        <attr name="ctv_strokeColor" format="color" />
-        <attr name="ctv_strokeJoinStyle">
+        <attr name="xtv_strokeWidth" format="dimension" />
+        <attr name="xtv_strokeMiter" format="dimension" />
+        <attr name="xtv_strokeColor" format="color" />
+        <attr name="xtv_strokeJoinStyle">
             <enum name="miter" value="0" />
             <enum name="bevel" value="1" />
             <enum name="round" value="2" />
         </attr>
+
+
+
+
+
+
+        <attr name="xtv_scrool_on_long_single" format="boolean" />
+        <attr name="xtv_cut_on_long_single" format="boolean" />
+        <attr name="xtv_single_line" format="boolean" />
+        <attr name="xtv_under_view" type="id" />
+        <attr name="xtv_auto_colors" format="string" />
+
     </declare-styleable>
 
 </resources>

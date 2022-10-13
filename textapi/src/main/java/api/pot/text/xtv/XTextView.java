@@ -38,17 +38,19 @@ public class XTextView extends SmartTextView {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int start = getLayout().getLineStart(getFirstLineIndex(this));
-        int end = getLayout().getLineEnd(getLastLineIndex(this));
-        //Toast.makeText(getContext(), getNumberOfWordsDisplayed(this)+" \n:::\n "+getText().toString().substring(start, end), Toast.LENGTH_SHORT).show();
-        if(end!=toIndex && (end-start)<mainText.length()){
-            fromIndex = start;
-            toIndex = end;
-            if(toIndex-fromIndex>=1)
-                setText(mainText.substring(fromIndex, toIndex-1)+"…");
-            else
-                setText(mainText.substring(fromIndex, toIndex));
-        }
+        try {
+            int start = getLayout().getLineStart(getFirstLineIndex(this));
+            int end = getLayout().getLineEnd(getLastLineIndex(this));
+            //Toast.makeText(getContext(), getNumberOfWordsDisplayed(this)+" \n:::\n "+getText().toString().substring(start, end), Toast.LENGTH_SHORT).show();
+            if(end!=toIndex && (end-start)<mainText.length()){
+                fromIndex = start;
+                toIndex = end;
+                if(toIndex-fromIndex>=1)
+                    setText(mainText.substring(fromIndex, toIndex-1)+"…");
+                else
+                    setText(mainText.substring(fromIndex, toIndex));
+            }
+        }catch (Exception e){}
     }
 
 

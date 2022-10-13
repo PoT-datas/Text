@@ -9,7 +9,6 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main"
     tools:context=".test.MainActivity"
     android:orientation="vertical">
 
@@ -22,16 +21,16 @@
         android:textStyle="bold"
         android:padding="0dp"
         android:textIsSelectable="true"
-        app:ctv_foreground="@drawable/fake_luxury_tiled"
-        app:ctv_innerShadowDy="2dp"
-        app:ctv_innerShadowColor="#FF000000"
-        app:ctv_innerShadowRadius="1dp"
-        app:ctv_outerShadowDy="3dp"
-        app:ctv_outerShadowColor="#FF0088ff"
-        app:ctv_outerShadowRadius="10dp"
-        app:ctv_strokeColor="#FFff0000"
-        app:ctv_strokeJoinStyle="miter"
-        app:ctv_strokeWidth="5dp"
+        app:xtv_foreground="@drawable/fake_luxury_tiled"
+        app:xtv_innerShadowDy="2dp"
+        app:xtv_innerShadowColor="#FF000000"
+        app:xtv_innerShadowRadius="1dp"
+        app:xtv_outerShadowDy="3dp"
+        app:xtv_outerShadowColor="#FF0088ff"
+        app:xtv_outerShadowRadius="10dp"
+        app:xtv_strokeColor="#FFff0000"
+        app:xtv_strokeJoinStyle="miter"
+        app:xtv_strokeWidth="5dp"
         android:text="Magic" />
 
 </LinearLayout>

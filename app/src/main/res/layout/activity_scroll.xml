@@ -9,7 +9,6 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main"
     tools:context=".test.MainActivity"
     android:orientation="vertical">
 
@@ -27,9 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/bg"
-            android:background="#ff0000">
-
-        </RelativeLayout>
+            android:background="#ff0000"/>
 
         <api.pot.text.xtv.tools.ScrollTextView
             android:layout_width="wrap_content"
@@ -41,7 +38,11 @@
             android:id="@+id/scrolltext"
             android:textIsSelectable="true"
             android:text="je suis jesus. L'unique fils de Dieu."
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            app:xtv_single_line="true"
+            app:xtv_cut_on_long_single="false"
+            app:xtv_scrool_on_long_single="true"
+            app:xtv_under_view="@id/bg"/>
 
     </RelativeLayout>
 

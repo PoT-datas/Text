@@ -2,19 +2,36 @@ package api.pot.text.xtv.tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 import android.widget.Toast;
 
+import api.pot.text.R;
+
 @SuppressLint("AppCompatCustomView")
 public class ScrollTextView extends MagicTextView {
     private boolean scroolOnLongSingle = true;
+
+    public boolean isScroolOnLongSingle() {
+        return scroolOnLongSingle;
+    }
+
+    public void setScroolOnLongSingle(boolean scroolOnLongSingle) {
+        this.scroolOnLongSingle = scroolOnLongSingle;
+        invalidate();
+    }
+
+    public void tongleScroolOnLongSingle() {
+        setScroolOnLongSingle(!isScroolOnLongSingle());
+    }
 
     // scrolling feature
     private Scroller mSlr;
@@ -51,6 +68,7 @@ public class ScrollTextView extends MagicTextView {
         //setSingleLine();
         setEllipsize(null);
         //setVisibility(INVISIBLE);
+        init(attrs);
     }
 
     /*
@@ -58,10 +76,26 @@ public class ScrollTextView extends MagicTextView {
      */
     public ScrollTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        // customize the TextView
-        //setSingleLine();
         setEllipsize(null);
-        //setVisibility(INVISIBLE);
+    }
+
+    @Override
+    public void init(AttributeSet attrs) {
+        super.init(attrs);
+        if(attrs != null){
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MagicTextView);
+            scroolOnLongSingle = a.getBoolean( R.styleable.MagicTextView_xtv_scrool_on_long_single, true);
+        }
+        /**setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN && isSinglLine() && (isCutOnLongSingle() || isScroolOnLongSingle())){
+                    tongleCutOnLongSingle();
+                    invalidate();
+                }
+                return false;
+            }
+        });*/
     }
 
     public void tongle(){
@@ -120,16 +154,25 @@ public class ScrollTextView extends MagicTextView {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if(scroolOnLongSingle){
-            if(calculateTextLen()>getWidth())
+        scroolControl();
+    }
+
+    private void scroolControl() {
+        if(!isSinglLine()) return;
+        if(scroolOnLongSingle && !cutOnLongSingle){
+            if(calculateTextLen()>getWidth()){
                 if(!scroolChecked) {
                     startScroll();
                     scroolChecked = true;
                 }
-            else
-                if(!isPaused()) pauseScroll();
+            }else{
+                scroolChecked = false;
+                stopScroll();
+            }
+        }else if(!mPaused){
+            scroolChecked = false;
+            stopScroll();
         }
-        Toast.makeText(getContext(), calculateTextLen()+"/"+getWidth(), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -147,14 +190,9 @@ public class ScrollTextView extends MagicTextView {
         return scrollingLen;
     }
 
-    private int calculateTextLen() {
-        TextPaint tp = getPaint();
-        Rect rect = new Rect();
-        String strTxt = getText().toString();
-        tp.getTextBounds(strTxt, 0, strTxt.length(), rect);
-        int textLen = rect.width();
-        rect = null;
-        return textLen;
+    @Override
+    public CharSequence getText() {
+        return super.getText();
     }
 
     /**
@@ -179,6 +217,16 @@ public class ScrollTextView extends MagicTextView {
         mSlr.startScroll(0,0,0,0);
 
         mSlr.abortAnimation();*/
+    }
+
+    public void stopScroll() {
+        if (null == mSlr)
+            return;
+
+        if (mPaused)
+            return;
+
+        mPaused = true;
     }
 
     @Override
