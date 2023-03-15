@@ -385,6 +385,7 @@ public class MagicTextView extends TextView {
 	private boolean newText = false;
 	@Override
 	public void setText(CharSequence text, BufferType type) {
+		if(text==null)return;
 		super.setText(text, type);
 		if(toMain)mainText = text.toString();
 		else toMain = true;
